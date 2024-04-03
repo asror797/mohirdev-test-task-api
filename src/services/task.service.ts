@@ -1,5 +1,6 @@
 import { PaginationDto } from "@dtos"
 import { taskModel } from "@models"
+import { TaskCreateDto } from "dtos/task"
 
 
 
@@ -41,8 +42,10 @@ export class TaskService {
     return user
   }
 
-  public async taskCreate() {
-    const user = await this.tasks.create({})
+  public async taskCreate(payload: TaskCreateDto) {
+    const user = await this.tasks.create(payload)
+
+    return user
   }
 
   public async taskUpdate(payload: any) {}

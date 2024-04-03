@@ -12,5 +12,5 @@ export class TaskCreateDto {
 
   @IsString()
   @IsNotEmpty()
-  user: string
+  userId: string
 }

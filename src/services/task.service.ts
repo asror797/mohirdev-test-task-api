@@ -1,8 +1,5 @@
-import { PaginationDto } from "@dtos"
+import { PaginationDto, TaskCreateDto } from "@dtos"
 import { taskModel } from "@models"
-import { TaskCreateDto } from "dtos/task"
-
-
 
 export class TaskService {
   private tasks = taskModel
@@ -23,6 +20,7 @@ export class TaskService {
       .skip((payload.pageNumber - 1) * payload.pageSize)
       .limit(payload.pageSize)
       .sort({ createdAt: -1 })
+      .select('title description state createdAt updatedAt')
       .exec()
 
     const count = await this.tasks.countDocuments(query).exec()

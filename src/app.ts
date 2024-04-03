@@ -1,25 +1,44 @@
 import express from 'express'
-import { Routes } from './interfaces'
+import { Routes } from '@interfaces'
+import { PORT } from '@config'
+import { connect } from 'mongoose'
+import { dbConnection } from '@database'
 
 class App {
-
   public app: express.Application
+  private PORT = PORT || 3030
   
   constructor(routes: Routes[]) {
     this.app = express()
-    this.initializeMiddlwares()
+    this.connectionToDatabase()
+    this.initializeMiddlewares()
     this.initializeRoutes(routes)
     this.initializeErrorHandling()
   }
 
   public async run() {
-    this.app.listen(5000, () => {
-      console.log(`Server is runing`)
+    this.app.listen(this.PORT, () => {
+      console.log(`Server is runing at ${this.PORT}`)
     })
   }
 
-  private initializeRoutes(routes: Routes[]) {}
-  private initializeMiddlwares() {}
+  private async connectionToDatabase() {
+    try {
+      await connect(dbConnection.url, dbConnection.options)
+      console.log('Connected to database')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private initializeRoutes(routes: Routes[]) {
+    routes.forEach((route) => {
+      this.app.use(`/`,route.router)
+    })
+  }
+
+  private initializeMiddlewares() {}
+
   private initializeErrorHandling() {}
 }
 

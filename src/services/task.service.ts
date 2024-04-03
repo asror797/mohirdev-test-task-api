@@ -1,31 +1,48 @@
-import { userModel } from "@models"
+import { PaginationDto } from "@dtos"
+import { taskModel } from "@models"
 
 
 
 export class TaskService {
-  private users = userModel
+  private tasks = taskModel
 
-  public async taskRetrieveAll(payload: any) {
-    const userList = await this.users.find().exec()
+  public async taskRetrieveAll(payload: PaginationDto) {
+    const query: any = {}
 
+    if (payload.search) {
+      query.title = { $regex: payload.search.trim(), $options: 'i' }
+    }
+
+    if (payload.userId) {
+      query.user = payload.userId
+    }
+
+    const taskList = await this.tasks
+      .find(query)
+      .skip((payload.pageNumber - 1) * payload.pageSize)
+      .limit(payload.pageSize)
+      .sort({ createdAt: -1 })
+      .exec()
+
+    const count = await this.tasks.countDocuments(query).exec()
 
     return {
-      count: 1,
+      count: count,
       pageSize: payload.pageSize,
       pageNumber: payload.pageNumber,
       pageCount: 5,
-      taslList: userList
+      taslList: taskList
     }
   }
 
   public async taskRetrieveOne() {
-    const user = await this.users.findById('').exec()
+    const user = await this.tasks.findById('').exec()
 
     return user
   }
 
   public async taskCreate() {
-    const user = await this.users.create({})
+    const user = await this.tasks.create({})
   }
 
   public async taskUpdate(payload: any) {}

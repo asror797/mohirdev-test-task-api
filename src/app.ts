@@ -3,6 +3,7 @@ import { Routes } from '@interfaces'
 import { PORT } from '@config'
 import { connect } from 'mongoose'
 import { dbConnection } from '@database'
+import cors from 'cors'
 
 class App {
   public app: express.Application
@@ -37,7 +38,10 @@ class App {
     })
   }
 
-  private initializeMiddlewares() {}
+  private initializeMiddlewares() {
+    this.app.use(cors())
+    this.app.use(express.json())
+  }
 
   private initializeErrorHandling() {}
 }

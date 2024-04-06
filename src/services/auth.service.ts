@@ -11,6 +11,8 @@ import {
 
 export class AuthService {
   private users = userModel
+  private jwtAccessTokenSecret = JWT_ACCESS_TOKEN_SECRET_KEY || 'access_secret_key'
+  private jwtRefreshTokenSecret = JWT_REFRESH_TOKEN_SECRET_KEY || 'refresh_secret_key'
 
   public async userSignUp(payload: any) {
     await this.#_checkUserEmail({ email: payload.email })
@@ -18,7 +20,7 @@ export class AuthService {
     const user = await this.users.create({
       fullname: payload.fullname,
       email: payload.email,
-      password: hashPassword(payload.password)
+      password: await hashPassword(payload.password)
     })
 
     return {
@@ -44,12 +46,14 @@ export class AuthService {
     }
   }
 
+  public async userRefresh(payload: any) {}
+
   public generateAccessToken(payload: any) {
-    return jwt.sign(payload, JWT_ACCESS_TOKEN_SECRET_KEY || 'jwt_secret_key', { expiresIn: JWT_ACCESS_TOKEN_EXPIRY })
+    return jwt.sign({ ...payload }, this.jwtAccessTokenSecret, { expiresIn: '15m' })
   }
 
   public generateRefreshToken(payload: any) {
-    return jwt.sign(payload, JWT_REFRESH_TOKEN_SECRET_KEY || 'ss', { expiresIn: JWT_REFRESH_TOKEN_EXPIRY })
+    return jwt.sign({ ...payload }, this.jwtRefreshTokenSecret, { expiresIn: '7d' })
   }
 
   async #_checkUserEmail(payload: { email: string }) {

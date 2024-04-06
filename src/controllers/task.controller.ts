@@ -1,4 +1,3 @@
-import { RequestWithUser } from "@interfaces";
 import { TaskService } from "@services";
 import { NextFunction, Request, Response } from "express";
 import { ParsedQs } from "qs";

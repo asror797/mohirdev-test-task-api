@@ -24,14 +24,14 @@ export class TaskService {
       .select('title description state createdAt updatedAt')
       .exec()
 
-    const count = await this.tasks.countDocuments(query).exec()
+    const totalCount = await this.tasks.countDocuments(query).exec()
 
     return {
-      count: count,
+      count: totalCount,
       pageSize: payload.pageSize,
       pageNumber: payload.pageNumber,
-      pageCount: 5,
-      taskList: taskList
+      pageCount: Math.ceil(totalCount / payload.pageSize),
+      taskList
     }
   }
 
@@ -43,9 +43,9 @@ export class TaskService {
   }
 
   public async taskCreate(payload: TaskCreateDto) {
-    const user = await this.tasks.create(payload)
+    const task = await this.tasks.create(payload)
 
-    return user
+    return task
   }
 
   public async taskUpdate(payload: TaskUpdateDto) {
@@ -60,7 +60,6 @@ export class TaskService {
 
   public async taskDelete(payload: { id: string }) {
     await this.taskRetrieveOne({ id: payload.id })
-
     const task = await this.tasks.findByIdAndDelete(payload.id).exec()
     
     return task

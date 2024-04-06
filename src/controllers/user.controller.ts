@@ -7,7 +7,14 @@ export class UserController {
 
   public userRetrieveAll = async(req:Request, res:Response, next:NextFunction) => {
     try {
-      res.json(await this.userService.userRetrieveAll())
+      const pageNumber = parseInt(req.query.page as string) || 1
+      const pageSize = parseInt(req.query.size as string) || 10
+      const search = req.query.search as string | null
+      res.json(await this.userService.userRetrieveAll({
+        pageSize,
+        pageNumber,
+        search
+      }))
     } catch (error) {
       next(error)
     }
@@ -15,7 +22,16 @@ export class UserController {
 
   public userRetrieveOne = async(req:Request, res:Response, next:NextFunction) => {
     try {
-      res.json(await this.userService.userRetrieveOne())
+      const id = req.params.id as string
+      res.json(await this.userService.userRetrieveOne({ id }))
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public userCreate = async(req:Request,res:Response,next:NextFunction) => {
+    try {
+      res.json(await this.userService.userCreate({}))
     } catch (error) {
       next(error)
     }
@@ -28,5 +44,12 @@ export class UserController {
       next(error)
     }
   }
-}
 
+  public userDelete = async(req:Request, res:Response, next:NextFunction) => {
+    try {
+      res.json(await this.userService.userDelete({ id: req.params.id }))
+    } catch (error) {
+      next(error)
+    }
+  }
+}

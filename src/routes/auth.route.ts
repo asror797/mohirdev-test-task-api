@@ -11,8 +11,8 @@ export class AuthRoute {
   }
 
   private initializeRoutes() {
-    this.router.post(`${this.path}/sign-up`,this.authController.userSignUp)
-    this.router.post(`${this.path}/sign-in`,this.authController.userSignIn)
-    this.router.post(`${this.path}/refresh`,this.authController.userRefresh)
+    this.router.post(`${this.path}/sign-up`, this.authController.userSignUp)
+    this.router.post(`${this.path}/sign-in`, this.authController.userSignIn)
+    this.router.post(`${this.path}/refresh`, this.authController.userRefresh)
   }
 }

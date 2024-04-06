@@ -1,33 +1,31 @@
 import { IUser, UserRoleEnum } from '@interfaces'
 import { Document, Schema, model } from 'mongoose'
 
-
 const userSchema = new Schema(
   {
     fullname: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     role: {
       type: String,
       enum: Object.values(UserRoleEnum),
-      default: UserRoleEnum.User
-    }
+      default: UserRoleEnum.User,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 )
 
 export const userModel = model<IUser & Document>('user', userSchema)
-

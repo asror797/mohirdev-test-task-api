@@ -1,6 +1,6 @@
-import { PaginationDto, TaskCreateDto, TaskUpdateDto } from "@dtos"
-import { HttpException } from "@exceptions"
-import { taskModel } from "@models"
+import { PaginationDto, TaskCreateDto, TaskUpdateDto } from '@dtos'
+import { HttpException } from '@exceptions'
+import { taskModel } from '@models'
 
 export class TaskService {
   private tasks = taskModel
@@ -31,7 +31,7 @@ export class TaskService {
       pageSize: payload.pageSize,
       pageNumber: payload.pageNumber,
       pageCount: Math.ceil(totalCount / payload.pageSize),
-      taskList
+      taskList,
     }
   }
 
@@ -51,17 +51,22 @@ export class TaskService {
   public async taskUpdate(payload: TaskUpdateDto) {
     await this.taskRetrieveOne({ id: payload.id })
 
-    const task = await this.tasks.findByIdAndUpdate(payload.id, {
-      ... payload
-    }, { new: true }).exec()
-    return task 
-
+    const task = await this.tasks
+      .findByIdAndUpdate(
+        payload.id,
+        {
+          ...payload,
+        },
+        { new: true },
+      )
+      .exec()
+    return task
   }
 
   public async taskDelete(payload: { id: string }) {
     await this.taskRetrieveOne({ id: payload.id })
     const task = await this.tasks.findByIdAndDelete(payload.id).exec()
-    
+
     return task
   }
 }

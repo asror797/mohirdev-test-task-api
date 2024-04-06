@@ -7,5 +7,5 @@ export const {
   JWT_ACCESS_TOKEN_EXPIRY,
   JWT_REFRESH_TOKEN_EXPIRY,
   DB_URL,
-  PORT
+  PORT,
 } = process.env

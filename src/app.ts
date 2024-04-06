@@ -8,7 +8,7 @@ import cors from 'cors'
 class App {
   public app: express.Application
   private PORT = PORT || 3030
-  
+
   constructor(routes: Routes[]) {
     this.app = express()
     this.connectionToDatabase()
@@ -34,7 +34,7 @@ class App {
 
   private initializeRoutes(routes: Routes[]) {
     routes.forEach((route) => {
-      this.app.use(`/`,route.router)
+      this.app.use(`/`, route.router)
     })
   }
 

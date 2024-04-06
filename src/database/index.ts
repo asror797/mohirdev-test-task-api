@@ -11,6 +11,6 @@ interface DB_CONNECTION {
 export const dbConnection: DB_CONNECTION = {
   url: DB_URL,
   options: {
-    autoIndex: true
-  }
+    autoIndex: true,
+  },
 }

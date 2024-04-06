@@ -6,24 +6,24 @@ const taskSchema = new Schema(
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
     },
     description: {
-      type: String
+      type: String,
     },
     state: {
       type: String,
       enum: Object.values(TaskStateEnum),
-      default: TaskStateEnum.Created
-    }
+      default: TaskStateEnum.Created,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 )
 
-export const taskModel =  model<ITask & Document>('task', taskSchema)
+export const taskModel = model<ITask & Document>('task', taskSchema)

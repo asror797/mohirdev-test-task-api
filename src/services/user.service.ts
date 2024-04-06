@@ -27,7 +27,7 @@ export class UserService {
       pageSize: payload.pageSize,
       pageNumber: payload.pageNumber,
       pageCount: Math.ceil(totalCount / payload.pageSize),
-      userList
+      userList,
     }
   }
 
@@ -43,7 +43,7 @@ export class UserService {
     const user = await this.users.create({
       fullname: payload.fullname,
       email: payload.email,
-      password: payload.password
+      password: payload.password,
     })
 
     return user
@@ -51,7 +51,9 @@ export class UserService {
 
   public async userUpdate(payload: UserUpdateDto) {
     await this.userRetrieveOne({ id: payload.id })
-    const user = await this.users.findByIdAndUpdate(payload.id, {...payload }).exec()
+    const user = await this.users
+      .findByIdAndUpdate(payload.id, { ...payload })
+      .exec()
 
     return user
   }
@@ -60,15 +62,17 @@ export class UserService {
     await this.userRetrieveOne({ id: payload.id })
 
     const user = await this.users.findByIdAndDelete(payload.id).exec()
-  
+
     return user
   }
 
-  async #_checkUserEmail(payload: { email: string} ) {
-    const user = await this.users.findOne({
-      email: payload.email
-    }).exec()
+  async #_checkUserEmail(payload: { email: string }) {
+    const user = await this.users
+      .findOne({
+        email: payload.email,
+      })
+      .exec()
 
-    if(user) throw new Error('Error')
+    if (user) throw new Error('Error')
   }
 }

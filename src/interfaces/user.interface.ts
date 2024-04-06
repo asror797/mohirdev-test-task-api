@@ -1,12 +1,12 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose'
 
 export enum UserRoleEnum {
   User = 'user',
-  Admin = 'admin'
+  Admin = 'admin',
 }
 
 export interface IUser {
-  _id: Types.ObjectId,
+  _id: Types.ObjectId
   fullname: string
   email: string
   role: UserRoleEnum

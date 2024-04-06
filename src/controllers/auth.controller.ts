@@ -4,7 +4,11 @@ import { AuthService } from '@services'
 export class AuthController {
   private authService = new AuthService()
 
-  public userSignUp = async(req:Request, res:Response, next:NextFunction) => {
+  public userSignUp = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const payload = req.body
       console.log(payload)
@@ -14,7 +18,11 @@ export class AuthController {
     }
   }
 
-  public userSignIn = async(req:Request, res:Response, next:NextFunction) => {
+  public userSignIn = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       const payload = req.body
       res.json(await this.authService.userSignIn(payload))
@@ -23,7 +31,11 @@ export class AuthController {
     }
   }
 
-  public userRefresh = async(req:Request, res:Response, next:NextFunction) => {
+  public userRefresh = async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
     try {
       res.json(await this.authService.userRefresh({}))
     } catch (error) {

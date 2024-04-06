@@ -1,10 +1,10 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose'
 
 export enum TaskStateEnum {
   Created = 'created',
   Pending = 'pending',
   Completed = 'completed',
-  Deleted = 'deleted'
+  Deleted = 'deleted',
 }
 
 export interface ITask {

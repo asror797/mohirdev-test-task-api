@@ -1,11 +1,14 @@
 import { PaginationDto, TaskCreateDto, TaskUpdateDto } from '@dtos'
 import { HttpException } from '@exceptions'
+import { TaskRetrieveAllResponse } from '@interfaces'
 import { taskModel } from '@models'
 
 export class TaskService {
   private tasks = taskModel
 
-  public async taskRetrieveAll(payload: PaginationDto) {
+  public async taskRetrieveAll(
+    payload: PaginationDto,
+  ): Promise<TaskRetrieveAllResponse> {
     const query: any = {}
 
     if (payload.search) {

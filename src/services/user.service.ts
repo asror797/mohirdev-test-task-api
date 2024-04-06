@@ -1,10 +1,12 @@
+import { PaginationDto } from '@dtos'
+import { UserRetrieveAllResponse } from '@interfaces'
 import { userModel } from '@models'
 import { UserUpdateDto } from 'dtos/user'
 
 export class UserService {
   private users = userModel
-
-  public async userRetrieveAll(payload: any) {
+  
+  public async userRetrieveAll(payload: PaginationDto): Promise<UserRetrieveAllResponse> {
     const query: any = {}
 
     if (payload.search) {

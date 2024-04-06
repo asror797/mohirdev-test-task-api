@@ -11,12 +11,6 @@ import {
 
 export class AuthService {
   private users = userModel
-  private jwtAccessTokenSecret =
-    JWT_ACCESS_TOKEN_SECRET_KEY || 'access_secret_key'
-  private jwtRefreshTokenSecret =
-    JWT_REFRESH_TOKEN_SECRET_KEY || 'refresh_secret_key'
-  private jwtAccessTokenExpriy = JWT_ACCESS_TOKEN_EXPIRY || '15m'
-  private jwtRefreshTokenExpiry = JWT_REFRESH_TOKEN_EXPIRY || '7d'
 
   public async userSignUp(payload: any) {
     await this.#_checkUserEmail({ email: payload.email })
@@ -40,7 +34,7 @@ export class AuthService {
       })
       .exec()
 
-    if (!user) throw new HttpException(404, ' user not found')
+    if (!user) throw new HttpException(404, 'User not found')
 
     if (await validatePassword(payload.passowrd, user.password)) {
       throw new HttpException(400, 'Password is wrong')
@@ -60,14 +54,14 @@ export class AuthService {
   }
 
   public generateAccessToken(payload: any) {
-    return jwt.sign({ ...payload }, this.jwtAccessTokenSecret, {
-      expiresIn: this.jwtAccessTokenExpriy,
+    return jwt.sign({ ...payload }, JWT_ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: JWT_ACCESS_TOKEN_EXPIRY,
     })
   }
 
   public generateRefreshToken(payload: any) {
-    return jwt.sign({ ...payload }, this.jwtRefreshTokenSecret, {
-      expiresIn: this.jwtRefreshTokenExpiry,
+    return jwt.sign({ ...payload }, JWT_REFRESH_TOKEN_SECRET_KEY, {
+      expiresIn: JWT_REFRESH_TOKEN_EXPIRY,
     })
   }
 

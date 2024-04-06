@@ -1,9 +1,10 @@
-import { TaskRoute, UserRoute } from '@routes'
+import { AuthRoute, TaskRoute, UserRoute } from '@routes'
 import App from './app'
 
 const app = new App([
+  new AuthRoute(),
   new TaskRoute(),
-  new UserRoute()
+  new UserRoute(),
 ])
 
 app.run()

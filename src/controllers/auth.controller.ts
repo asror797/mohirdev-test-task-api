@@ -6,7 +6,8 @@ export class AuthController {
 
   public userSignUp = async(req:Request, res:Response, next:NextFunction) => {
     try {
-      res.json(await this.authService.userSignUp())
+      const payload = req.body
+      res.json(await this.authService.userSignUp(payload))
     } catch (error) {
       next(error)
     }
@@ -14,7 +15,16 @@ export class AuthController {
 
   public userSignIn = async(req:Request, res:Response, next:NextFunction) => {
     try {
-      res.json(await this.authService.userSignIn())
+      const payload = req.body
+      res.json(await this.authService.userSignIn(payload))
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public userRefresh = async(req:Request, res:Response, next:NextFunction) => {
+    try {
+      
     } catch (error) {
       next(error)
     }

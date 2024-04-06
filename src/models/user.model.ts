@@ -1,10 +1,6 @@
-import { IUser } from '@interfaces'
+import { IUser, UserRoleEnum } from '@interfaces'
 import { Document, Schema, model } from 'mongoose'
 
-export enum UserRole {
-  User = 'USER',
-  Admin = 'ADMIN'
-}
 
 const userSchema = new Schema(
   {
@@ -24,8 +20,8 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: Object.values(UserRole),
-      default: UserRole.User
+      enum: Object.values(UserRoleEnum),
+      default: UserRoleEnum.User
     }
   },
   {

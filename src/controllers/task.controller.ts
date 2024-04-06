@@ -26,4 +26,31 @@ export class TaskController {
     }
   }
 
+  public taskCreate = async(req: Request,res: Response, next: NextFunction) => {
+    try {
+      const payload = req.body
+      res.json(await this.taskService.taskCreate(payload))
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public taskUpdate = async(req:Request, res:Response, next: NextFunction) => {
+    try {
+      const payload = req.body
+      res.json(await this.taskService.taskUpdate(payload))
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  public taskDelete = async(req:Request, res:Response, next: NextFunction) => {
+    try {
+      const payload = req.body
+      res.json(await this.taskService.taskDelete(payload))
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }

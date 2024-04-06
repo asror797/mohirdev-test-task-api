@@ -1,6 +1,5 @@
-import { ITask } from '@interfaces'
+import { ITask, TaskStateEnum } from '@interfaces'
 import { Document, Schema, model } from 'mongoose'
-
 
 const taskSchema = new Schema(
   {
@@ -18,7 +17,8 @@ const taskSchema = new Schema(
     },
     state: {
       type: String,
-      required: true
+      enum: Object.values(TaskStateEnum),
+      default: TaskStateEnum.Created
     }
   },
   {

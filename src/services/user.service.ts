@@ -1,12 +1,15 @@
 import { PaginationDto } from '@dtos'
-import { UserRetrieveAllResponse } from '@interfaces'
+import { HttpException } from '@exceptions'
+import { IUser, UserRetrieveAllResponse } from '@interfaces'
 import { userModel } from '@models'
 import { UserUpdateDto } from 'dtos/user'
 
 export class UserService {
   private users = userModel
-  
-  public async userRetrieveAll(payload: PaginationDto): Promise<UserRetrieveAllResponse> {
+
+  public async userRetrieveAll(
+    payload: PaginationDto,
+  ): Promise<UserRetrieveAllResponse> {
     const query: any = {}
 
     if (payload.search) {
@@ -33,9 +36,9 @@ export class UserService {
     }
   }
 
-  public async userRetrieveOne(payload: { id: string }) {
-    const user = await this.users.findById(payload.id).exec()
-
+  public async userRetrieveOne(payload: { id: string }):Promise<IUser> {
+    const user = await this.users.findById(payload.id).select('-password').exec()
+    if (!user) throw new HttpException(404, 'User not found')
     return user
   }
 

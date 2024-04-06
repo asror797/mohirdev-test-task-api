@@ -23,6 +23,7 @@ const taskSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false
   },
 )
 

@@ -1,4 +1,5 @@
-import { PaginationDto, TaskCreateDto } from "@dtos"
+import { PaginationDto, TaskCreateDto, TaskUpdateDto } from "@dtos"
+import { HttpException } from "@exceptions"
 import { taskModel } from "@models"
 
 export class TaskService {
@@ -35,9 +36,10 @@ export class TaskService {
   }
 
   public async taskRetrieveOne(payload: { id: string }) {
-    const user = await this.tasks.findById(payload.id).exec()
+    const task = await this.tasks.findById(payload.id).exec()
 
-    return user
+    if (!task) throw new HttpException(404, 'Task not found')
+    return task
   }
 
   public async taskCreate(payload: TaskCreateDto) {
@@ -46,7 +48,21 @@ export class TaskService {
     return user
   }
 
-  public async taskUpdate(payload: any) {}
+  public async taskUpdate(payload: TaskUpdateDto) {
+    await this.taskRetrieveOne({ id: payload.id })
 
-  public async taskDelete(payload: { id: string }) {}
+    const task = await this.tasks.findByIdAndUpdate(payload.id, {
+      ... payload
+    }, { new: true }).exec()
+    return task 
+
+  }
+
+  public async taskDelete(payload: { id: string }) {
+    await this.taskRetrieveOne({ id: payload.id })
+
+    const task = await this.tasks.findByIdAndDelete(payload.id).exec()
+    
+    return task
+  }
 }

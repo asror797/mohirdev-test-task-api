@@ -1,17 +1,21 @@
 import { IsNotEmpty, IsOptional, IsString } from "class-validator"
 
-export class TaskCreateDto {
+export class TaskUpdateDto {
   @IsString()
-  @IsOptional()
-  title: string
+  @IsNotEmpty()
+  id: string
 
   @IsString()
   @IsOptional()
-  description: string
+  title?: string
 
   @IsString()
   @IsOptional()
-  state: string
+  description?: string
+
+  @IsString()
+  @IsOptional()
+  state?: string
 
   @IsString()
   @IsNotEmpty()

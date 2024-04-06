@@ -2,7 +2,7 @@ import { UserController } from "@controllers"
 import { Router } from "express"
 
 export class UserRoute {
-  public path = '/'
+  public path = '/user'
   public router = Router()
   public userController = new UserController()
 

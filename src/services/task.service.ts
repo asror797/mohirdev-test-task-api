@@ -30,12 +30,12 @@ export class TaskService {
       pageSize: payload.pageSize,
       pageNumber: payload.pageNumber,
       pageCount: 5,
-      taslList: taskList
+      taskList: taskList
     }
   }
 
-  public async taskRetrieveOne() {
-    const user = await this.tasks.findById('').exec()
+  public async taskRetrieveOne(payload: { id: string }) {
+    const user = await this.tasks.findById(payload.id).exec()
 
     return user
   }

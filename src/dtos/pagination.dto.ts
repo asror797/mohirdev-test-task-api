@@ -10,9 +10,9 @@ export class PaginationDto {
 
   @IsString()
   @IsOptional()
-  search: string
+  search?: string
 
   @IsString()
   @IsOptional()
-  userId: string
+  userId?: string
 }

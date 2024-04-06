@@ -2,7 +2,7 @@ import { TaskController } from '@controllers'
 import { Router } from 'express'
 
 export class TaskRoute {
-  public path = '/'
+  public path = '/task'
   public router = Router()
   public taskController = new TaskController()
 

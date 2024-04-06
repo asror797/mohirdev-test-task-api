@@ -36,13 +36,16 @@ export class UserService {
     }
   }
 
-  public async userRetrieveOne(payload: { id: string }):Promise<IUser> {
-    const user = await this.users.findById(payload.id).select('-password').exec()
+  public async userRetrieveOne(payload: { id: string }): Promise<IUser> {
+    const user = await this.users
+      .findById(payload.id)
+      .select('-password -refresh')
+      .exec()
     if (!user) throw new HttpException(404, 'User not found')
     return user
   }
 
-  public async userCreate(payload: any) {
+  public async userCreate(payload: any): Promise<IUser> {
     await this.#_checkUserEmail({ email: payload.email })
 
     const user = await this.users.create({
@@ -54,7 +57,7 @@ export class UserService {
     return user
   }
 
-  public async userUpdate(payload: UserUpdateDto) {
+  public async userUpdate(payload: UserUpdateDto): Promise<IUser | null> {
     await this.userRetrieveOne({ id: payload.id })
     const user = await this.users
       .findByIdAndUpdate(payload.id, { ...payload })
@@ -63,15 +66,18 @@ export class UserService {
     return user
   }
 
-  public async userDelete(payload: { id: string }) {
+  public async userDelete(payload: { id: string }): Promise<IUser | null> {
     await this.userRetrieveOne({ id: payload.id })
 
-    const user = await this.users.findByIdAndDelete(payload.id).exec()
+    const user = await this.users
+      .findByIdAndDelete(payload.id)
+      .select('-password')
+      .exec()
 
     return user
   }
 
-  async #_checkUserEmail(payload: { email: string }) {
+  async #_checkUserEmail(payload: { email: string }): Promise<void> {
     const user = await this.users
       .findOne({
         email: payload.email,

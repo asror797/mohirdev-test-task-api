@@ -12,7 +12,7 @@ export class UserController {
     try {
       const pageNumber = parseInt(req.query.page as string) || 1
       const pageSize = parseInt(req.query.size as string) || 10
-      const search = req.query.search as string | null
+      const search = req.query.search as string | undefined
       res.json(
         await this.userService.userRetrieveAll({
           pageSize,
@@ -44,7 +44,8 @@ export class UserController {
     next: NextFunction,
   ) => {
     try {
-      res.json(await this.userService.userCreate({}))
+      const payload = req.body
+      res.json(await this.userService.userCreate(payload))
     } catch (error) {
       next(error)
     }

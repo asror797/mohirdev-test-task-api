@@ -7,6 +7,7 @@ export const checkPermission = (action: string) => {
     next: NextFunction,
   ): Promise<void> => {
     try {
+      console.log(action)
       next()
     } catch (error) {
       next(error)

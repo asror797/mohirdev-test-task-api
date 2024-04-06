@@ -8,6 +8,7 @@ import {
   JWT_REFRESH_TOKEN_EXPIRY,
   JWT_REFRESH_TOKEN_SECRET_KEY,
 } from '@config'
+import { AccessTokenDto, RefreshTokenDto } from '@dtos'
 
 export class AuthService {
   private users = userModel
@@ -21,9 +22,14 @@ export class AuthService {
       password: await hashPassword(payload.password),
     })
 
+    const accessToken = this.generateAccessToken({ id: user['_id'], role: user.role})
+    const refreshToken = this.generateRefreshToken({ id: user['_id'], role: user.role})
+
+    await this.#_saveUserRefresh({ id: user['_id'], refresh: refreshToken })
+
     return {
-      accessToken: this.generateAccessToken(user),
-      refreshToken: this.generateRefreshToken(user),
+      accessToken,
+      refreshToken,
     }
   }
 
@@ -41,26 +47,35 @@ export class AuthService {
     }
 
     return {
-      accessToken: this.generateAccessToken(user),
-      refreshToken: this.generateRefreshToken(user),
+      accessToken: this.generateAccessToken({ id: user['_id'], role: user.role}),
+      refreshToken: this.generateRefreshToken({ id: user['_id'], role: user.role}),
     }
   }
 
   public async userRefresh(payload: any) {
+    const user = await this.users.findOne({
+      _id: payload.id,
+      refresh: payload.refresh,
+    })
+
+    if (!user) throw new HttpException(400, 'Invalid refresh token')
+
+    const accessToken = this.generateAccessToken({ id: user['_id'], role: user.role})
+
     return {
-      accessToken: this.generateAccessToken(payload),
-      refreshToken: this.generateRefreshToken(payload),
+      accessToken: accessToken,
+      refreshToken: payload.refresh,
     }
   }
 
-  public generateAccessToken(payload: any) {
-    return jwt.sign({ ...payload }, JWT_ACCESS_TOKEN_SECRET_KEY, {
+  public generateAccessToken(payload: AccessTokenDto) {
+    return jwt.sign({ id: payload.id, role: payload.role }, JWT_ACCESS_TOKEN_SECRET_KEY, {
       expiresIn: JWT_ACCESS_TOKEN_EXPIRY,
     })
   }
 
-  public generateRefreshToken(payload: any) {
-    return jwt.sign({ ...payload }, JWT_REFRESH_TOKEN_SECRET_KEY, {
+  public generateRefreshToken(payload: RefreshTokenDto) {
+    return jwt.sign({ id: payload.id, role: payload.role }, JWT_REFRESH_TOKEN_SECRET_KEY, {
       expiresIn: JWT_REFRESH_TOKEN_EXPIRY,
     })
   }
@@ -73,5 +88,9 @@ export class AuthService {
       .exec()
 
     if (user) throw new HttpException(400, 'Email already used')
+  }
+
+  async #_saveUserRefresh(payload: { id: string; refresh: string }) {
+    await this.users.findByIdAndUpdate(payload.id, { refresh: payload.refresh })
   }
 }

@@ -22,10 +22,13 @@ const userSchema = new Schema(
       enum: Object.values(UserRoleEnum),
       default: UserRoleEnum.User,
     },
+    refresh: {
+      type: String,
+    },
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
   },
 )
 

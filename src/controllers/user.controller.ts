@@ -1,5 +1,7 @@
+import { IdDto, UserUpdateDto } from '@dtos'
 import { UserService } from '@services'
 import { NextFunction, Request, Response } from 'express'
+import { validation } from 'utils/validation.util'
 
 export class UserController {
   private userService = new UserService()
@@ -31,8 +33,8 @@ export class UserController {
     next: NextFunction,
   ) => {
     try {
-      const id = req.params.id as string
-      res.json(await this.userService.userRetrieveOne({ id }))
+      await validation(IdDto, { id: req.params.id })
+      res.json(await this.userService.userRetrieveOne({ id: req.params.id }))
     } catch (error) {
       next(error)
     }
@@ -57,6 +59,12 @@ export class UserController {
     next: NextFunction,
   ) => {
     try {
+      await validation(IdDto, { id: req.params.id })
+      await validation(UserUpdateDto, { ...req.body, id: req.params.id }, {
+        skipMissingProperties: true
+      })
+
+      res.json(await this.userService.userUpdate({...req.body, id: req.params.id}))
     } catch (error) {
       next(error)
     }
@@ -68,6 +76,7 @@ export class UserController {
     next: NextFunction,
   ) => {
     try {
+      await validation(IdDto, { id: req.params.id })
       res.json(await this.userService.userDelete({ id: req.params.id }))
     } catch (error) {
       next(error)

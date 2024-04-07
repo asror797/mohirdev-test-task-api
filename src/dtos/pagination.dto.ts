@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsMongoId, IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class PaginationDto {
   @IsNumber()
@@ -14,4 +14,10 @@ export class PaginationDto {
   @IsString()
   @IsOptional()
   userId?: string
+}
+
+
+export class IdDto {
+  @IsMongoId()
+  readonly id: string
 }

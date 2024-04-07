@@ -4,6 +4,8 @@ import { PORT } from '@config'
 import { connect } from 'mongoose'
 import { dbConnection } from '@database'
 import cors from 'cors'
+import swaggerJSDoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 class App {
   public app: express.Application
@@ -13,6 +15,7 @@ class App {
     this.app = express()
     this.connectionToDatabase()
     this.initializeMiddlewares()
+    this.initializeSwagger()
     this.initializeRoutes(routes)
     this.initializeErrorHandling()
   }
@@ -41,6 +44,23 @@ class App {
   private initializeMiddlewares() {
     this.app.use(cors())
     this.app.use(express.json())
+  }
+
+  private initializeSwagger() {
+    const options = {
+      swaggerDefinition: {
+        info: {
+          title: 'REST API',
+          version: '1.0.0',
+          description: 'Marketplace HLD - App for catalogs to see and compare prices, buying products.',
+        },
+      },
+      apis: ['swagger.yaml'],
+    }
+
+    const swaggerDocs = swaggerJSDoc(options)
+    this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+
   }
 
   private initializeErrorHandling() {}

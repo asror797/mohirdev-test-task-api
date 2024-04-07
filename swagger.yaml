@@ -1,0 +1,414 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: An example API using Swagger
+  version: 1.0.0
+servers:
+  - url: http://api.example.com/v1
+
+tags:
+  - name: Auth
+    description: Authentication users
+  - name: User 
+    description: User routes
+  - name: Task
+    description: Task of users route
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+
+security:
+  - BearerAuth: []
+
+paths:
+  /auth/sign-up:
+    post:
+      summary: SignUp User 
+      tags: [Auth]
+      parameters:
+        - in: body
+          name: SignUp
+          description: Signup user 
+          required: true
+          schema:
+            $ref: "#/definitions/SignUp"
+      responses:
+        '200': 
+          description: Sign up user 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+  /auth/sign-in:
+    post:
+      summary: Sign In User 
+      tags: [Auth]
+      parameters:
+        - in: body
+          name: SignUp
+          description: Signup user 
+          required: true
+          schema:
+            $ref: "#/definitions/SignIn"
+      responses:
+        '200': 
+          description: Sign up user 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+
+  /auth/refresh:
+    post:
+      summary: Refresh User 
+      tags: [Auth]
+      parameters:
+        - in: body
+          name: SignUp
+          description: Signup user 
+          required: true
+          schema:
+            $ref: "#/definitions/Refresh"
+      responses:
+        '200': 
+          description: Sign up user 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+  /user:
+    get:
+      summary: Get all users
+      tags: [User]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+
+    post:
+      summary: Create a new user
+      tags: [User]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+
+  /user/{id}:
+    get:
+      summary: Get user by ID
+      tags: [User]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: User not found
+    patch:
+      summary: Update user 
+      tags: [User]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: User not found
+    delete:
+      summary: Delete user 
+      tags: [User]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: User not found
+
+  /task:
+    get:
+      summary: Get all users
+      tags: [Task]
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    email:
+                      type: string
+    post:
+      summary: Create a new task
+      tags: [Task]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+  /task/{id}:
+    get:
+      summary: Get task by ID
+      tags: [Task]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: Task not found
+    patch:
+      summary: Update task 
+      tags: [Task]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: Task not found
+    delete:
+      summary: Delete task 
+      tags: [Task]
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  email:
+                    type: string
+        '404':
+          description: Task not found
+
+
+
+definitions:
+  User:
+    type: object
+    properties:
+      _id:
+        type: string
+      fullname:
+        type: string
+      email: 
+        type: string
+      createdAt:
+        type: string
+
+  UserUpdate:
+    type: object
+    properties:
+      fullname:
+        type: string
+      email: 
+        type: string
+
+  SignUp:
+    type: object
+    properties:
+      fullname: 
+        type: string
+      email: 
+        type: string
+      passowrd:
+        type: string
+
+  SignIn: 
+    type: object
+    properties:
+      email:
+        type: string
+      passowrd:
+        type: string
+
+  Refresh:
+    type: object
+    properties:
+      refreshToken:
+        type: string

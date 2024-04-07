@@ -6,6 +6,7 @@ import { dbConnection } from '@database'
 import cors from 'cors'
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
+import { errorMiddleware } from '@middlewares'
 
 class App {
   public app: express.Application
@@ -63,7 +64,9 @@ class App {
 
   }
 
-  private initializeErrorHandling() {}
+  private initializeErrorHandling() {
+    this.app.use(errorMiddleware)
+  }
 }
 
 export default App
